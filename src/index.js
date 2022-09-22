@@ -1,47 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM  from 'react-dom';
 import './index.css';
+import Board from './board';
 
-function Square(props) {
-  return (
-    <button className="square" onClick={props.onClick}>
-      {props.value}
-    </button>
-  );
-}
-
-class Board extends React.Component {
-
-   renderSquare(i) {
-    return <Square 
-    value={this.props.squares[i]}
-    onClick={() => this.props.onClick(i)}/>;
-  }
-  
-    render() {
-      return (
-      <div>
-        <div className="status"></div>
-        <div className="board-row">
-        
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
-  }
-}
 
 class Game extends React.Component {
 
@@ -53,7 +14,7 @@ class Game extends React.Component {
       }],
       xIsNext: true,
       stepNumber: 0,
-      Numb: [11, 12, 13, 21, 22, 23, 31, 32, 33]
+      
      };
   }
 
@@ -61,7 +22,7 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
-    this.state.Numb.splice(i,1);
+    
     
       if (calculateWinner(squares) || squares[i]) {
       return;
@@ -74,7 +35,7 @@ class Game extends React.Component {
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
-      Numb: this.state.Numb
+     
       })
     }
 
@@ -92,7 +53,7 @@ class Game extends React.Component {
     const winner = calculateWinner(current.squares);
     const moves = history.map((step, move) => {
       const desc = move ?
-        'Go to move #' +  move +` (${this.state.Numb.splice(this.i,1)})`:
+        'Go to move #' +  move:
         'Go to game start';
       return (
         <li key={move}>
@@ -112,6 +73,7 @@ class Game extends React.Component {
       <div className="game">
         <div className="game-board">
           <Board 
+            combo={winner}
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
           />
@@ -120,8 +82,7 @@ class Game extends React.Component {
           <div>{status}</div>
           <ol>{moves}</ol>
         </div>
-        <div className = 'history'>{}</div>
-      </div>
+       </div>
     );
   }
 }
@@ -140,16 +101,12 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return lines[i];
     }
   }
   return null;
 }
 
-//function squareNumb(i) {
- //let Numb = {0:11, 1:12, 2:13, 3:21, 4:22, 5:23, 6:31, 7:32, 8:33};
- //return Numb[i]
-//}
 
 // ========================================
 
