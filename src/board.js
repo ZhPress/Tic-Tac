@@ -3,25 +3,15 @@ import Square from "./square";
   
   function Board (props) {
     
-       const [isWin, setIsWin] = useState(Array(9).fill(false))
-    
        function renderSquare(i) {
       return <Square 
-      isWin = {isWin[i]}
+      isWin = {props.isWin[i]}
       value={props.squares[i]}
       onClick={() => props.onClick(i)}/>;
     }
-    function win(combo) {
-        if (combo) {
-		let copy = Object.assign([], isWin);
-		copy.map(item => item = true);
-		setIsWin(copy)  
-        }
-        return (isWin, console.log(isWin))
-      }
+    
         return (
         <div>
-        <p>{win(props.combo)}</p>
           <div className="status"></div>
           <div className="board-row">
             {renderSquare(0)}
