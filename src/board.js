@@ -9,7 +9,7 @@ import Square from "./square";
       value={props.squares[i]}
       onClick={() => props.onClick(i)}/>;
     }
-    
+
         return (
         <div>
           <div className="status"></div>

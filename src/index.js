@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ReactDOM  from 'react-dom';
+import ReactDOM  from 'react-dom/client';
 import './index.css';
 import Board from './board';
 
@@ -8,34 +8,35 @@ class Game extends React.Component {
 
   constructor(props) {
     super(props);
+    
     this.state = {
       history: [{
         squares: Array(9).fill(null),
       }],
       xIsNext: true,
       stepNumber: 0,
-      
+      isRevers: false,
+      Numb: [],
      };
   }
 
   handleClick(i) {
+    const Cross = [11, 12, 13, 21, 22, 23, 31, 32, 33];
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
-    
-    
+
       if (calculateWinner(squares) || squares[i]) {
       return;
     } 
     squares[i] = this.state.xIsNext ? 'X' : 'O';
-    
         this.setState({
       history: history.concat([{
         squares: squares,
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
-     
+      //Numb: this.state.Numb.push(Cross[i])
       })
     }
 
@@ -47,12 +48,16 @@ class Game extends React.Component {
   }
 
   render() {
+    let isWin = Array(9).fill(false);
     const history = this.state.history;
+    const Numb = this.state.Numb;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
+    //this.setState({Numb: Numb.push(this.state.n)})
+
     const moves = history.map((step, move) => {
       const desc = move ?
-        'Go to move #' +  move:
+        'Go to move #' +  move + '# ': //+ Numb[move]
         'Go to game start';
       return (
         <li key={move}>
@@ -61,18 +66,18 @@ class Game extends React.Component {
       );
     });
 
-    let status; let isWin = Array(9).fill(false); 
+    let status;
     if (winner) {
       status = 'Winner: ' + winner[3];
       isWin = isWin.map((item, index) => {
       return (index === winner[0] || index === winner[1] || index === winner[2]?
       item = true: item)
       })
-    } else {
+    } else if (this.state.stepNumber < 9) {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+    } else {
+      status = 'Friendship WIN)))'
     }
-
-    
 
     return (
       <div className="game">
@@ -85,7 +90,10 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <ol style={{flexDirection: this.state.isRevers? 'column-reverse': 'column'}}
+          >{moves}</ol>
+          <button onClick={() => {this.setState({isRevers: !this.state.isRevers})}}
+          >{this.state.isRevers? 'Norm oder': 'Reverse'}</button>
         </div>
        </div>
     );

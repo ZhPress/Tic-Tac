@@ -3,12 +3,14 @@ body {
   margin: 20px;
 }
 
-ol, ul {
+ol {
+  display: flex; 
+  flex-direction: column;
   padding-left: 30px;
   cursor: pointer;
   
 }
-
+ 
 li, button:hover {
   cursor: pointer;
   font-weight: bold;
